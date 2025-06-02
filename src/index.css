@@ -1,0 +1,39 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better button and link interactions */
+button, 
+a {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Remove outline for clicked tabs */
+.MuiTab-root {
+  outline: none !important;
+}
+
+/* Smooth transition for dark mode */
+.MuiPaper-root,
+.MuiCard-root,
+.MuiAppBar-root {
+  transition: background-color 0.3s ease-in-out, 
+              box-shadow 0.3s ease-in-out,
+              transform 0.2s ease-in-out !important;
+}
