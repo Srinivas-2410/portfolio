@@ -16,7 +16,7 @@ export default function Resume() {
           variant="contained"
           color="primary"
           startIcon={<Download size={18} />}
-          href="public/resume.pdf"
+          href="/resume.pdf"
           download
         >
           Download Resume

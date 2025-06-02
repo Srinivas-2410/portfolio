@@ -22,7 +22,7 @@ export default function About() {
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
             <Avatar
               sx={{ width: 150, height: 150 }}
-              src="public/photo.png"
+              src="/photo.png"
               alt="Profile Picture"
             />
             <Typography variant="h4" fontWeight="bold">

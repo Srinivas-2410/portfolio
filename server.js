@@ -1,13 +1,20 @@
+/* global process */
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Replace with your MongoDB Atlas connection string
-mongoose.connect('mongodb+srv://srinivasshivakumar24:X462Qlaa3aH1E8vk@portfolio.wkw5faj.mongodb.net/?retryWrites=true&w=majority&appName=portfolio', { useNewUrlParser: true, useUnifiedTopology: true });
+// Use environment variable for MongoDB connection
+mongoose.connect(process.env.MONGODB_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+});
 
 const contactSchema = new mongoose.Schema({
   name: String,
