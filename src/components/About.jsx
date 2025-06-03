@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
   Avatar,
   Typography,
-  Button,
   Box,
   Tooltip,
   IconButton,
+  Grid,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import WorkIcon from "@mui/icons-material/Work";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PeopleIcon from "@mui/icons-material/People";
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
@@ -22,22 +25,18 @@ export default function About() {
   }, []);
 
   const stats = [
-    { icon: <Calendar className="w-5 h-5" />, label: 'Years Experience', value: '3+' },
-    { icon: <Award className="w-5 h-5" />, label: 'Projects Completed', value: '25+' },
-    { icon: <Users className="w-5 h-5" />, label: 'Happy Clients', value: '15+' },
-  ];
-
-  const socialLinks = [
-    { icon: <Github className="w-5 h-5" />, label: 'GitHub', href: 'https://github.com/yourusername', color: 'hover:text-gray-900 dark:hover:text-white' },
-    { icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn', href: 'https://linkedin.com/in/yourprofile', color: 'hover:text-blue-600' },
-    { icon: <Mail className="w-5 h-5" />, label: 'Email', href: 'mailto:your.email@example.com', color: 'hover:text-red-500' },
+    { icon: <WorkIcon />, label: 'Years Experience', value: '3+' },
+    { icon: <AssignmentIcon />, label: 'Projects Completed', value: '25+' },
+    { icon: <PeopleIcon />, label: 'Happy Clients', value: '15+' },
   ];
 
   return (
     <section className="min-h-screen flex items-center justify-center p-4">
       <Card
         elevation={3}
-        className="w-full max-w-2xl transform transition-all duration-300 hover:shadow-xl"
+        className={`w-full max-w-2xl transform transition-all duration-500 ${
+          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+        }`}
         sx={{
           background: "rgba(255, 255, 255, 0.8)",
           backdropFilter: "blur(10px)",
@@ -80,6 +79,27 @@ export default function About() {
                 </Typography>
               </Box>
             </Box>
+
+            {/* Stats */}
+            <Grid container spacing={3} className="justify-center">
+              {stats.map((stat, index) => (
+                <Grid item xs={12} sm={4} key={index}>
+                  <Box className="text-center p-4 rounded-lg hover:bg-white/50 transition-all">
+                    <Box className="flex justify-center mb-2">
+                      {React.cloneElement(stat.icon, { 
+                        sx: { fontSize: 32, color: 'primary.main' }
+                      })}
+                    </Box>
+                    <Typography variant="h4" className="font-bold text-primary">
+                      {stat.value}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {stat.label}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
 
             {/* Bio */}
             <Typography
