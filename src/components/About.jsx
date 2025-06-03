@@ -15,6 +15,24 @@ import EmailIcon from "@mui/icons-material/Email";
 import TwitterIcon from "@mui/icons-material/Twitter";
 
 export default function About() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const stats = [
+    { icon: <Calendar className="w-5 h-5" />, label: 'Years Experience', value: '3+' },
+    { icon: <Award className="w-5 h-5" />, label: 'Projects Completed', value: '25+' },
+    { icon: <Users className="w-5 h-5" />, label: 'Happy Clients', value: '15+' },
+  ];
+
+  const socialLinks = [
+    { icon: <Github className="w-5 h-5" />, label: 'GitHub', href: 'https://github.com/yourusername', color: 'hover:text-gray-900 dark:hover:text-white' },
+    { icon: <Linkedin className="w-5 h-5" />, label: 'LinkedIn', href: 'https://linkedin.com/in/yourprofile', color: 'hover:text-blue-600' },
+    { icon: <Mail className="w-5 h-5" />, label: 'Email', href: 'mailto:your.email@example.com', color: 'hover:text-red-500' },
+  ];
+
   return (
     <section className="min-h-screen flex items-center justify-center p-4">
       <Card
@@ -129,4 +147,3 @@ export default function About() {
     </section>
   );
 }
-
