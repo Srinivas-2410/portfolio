@@ -1,15 +1,25 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { 
   AppBar, 
-  Tabs, 
-  Tab, 
   Container, 
   ThemeProvider, 
   createTheme,
   CssBaseline,
   IconButton,
-  useMediaQuery
+  useMediaQuery,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useScrollTrigger,
+  Fade,
+  Fab,
+  Snackbar,
+  Alert
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import About from './components/About.jsx';
@@ -18,10 +28,67 @@ import Projects from './components/Projects.jsx';
 import Resume from './components/Resume.jsx';
 import Contact from './components/Contact.jsx';
 
+// Scroll to Top Component
+function ScrollTop() {
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <Fade in={trigger}>
+      <Box
+        onClick={handleClick}
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+          zIndex: 50
+        }}
+      >
+        <Fab
+          color="primary"
+          size="small"
+          aria-label="scroll back to top"
+          sx={{
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              transition: 'transform 0.2s ease-in-out'
+            }
+          }}
+        >
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </Box>
+    </Fade>
+  );
+}
+
 function App() {
-  const [value, setValue] = useState(0);
+  const [activeSection, setActiveSection] = useState(0);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [mode, setMode] = useState(prefersDarkMode ? 'dark' : 'light');
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [notification, setNotification] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
+
+  const sections = ['About', 'Skills', 'Projects', 'Resume', 'Contact'];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const theme = useMemo(
     () =>
@@ -57,84 +124,165 @@ function App() {
           },
         },
         components: {
-          MuiCard: {
+          MuiAppBar: {
             styleOverrides: {
               root: {
-                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                  boxShadow: mode === 'light' 
-                    ? '0 6px 20px rgba(0,0,0,0.1)' 
-                    : '0 6px 20px rgba(0,0,0,0.4)',
-                },
-              },
-            },
+                backdropFilter: 'blur(8px)',
+                backgroundColor: mode === 'light' 
+                  ? 'rgba(255, 255, 255, 0.8)' 
+                  : 'rgba(18, 18, 18, 0.8)',
+                boxShadow: isScrolled 
+                  ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
+                  : 'none',
+                transition: 'all 0.3s ease-in-out',
+              }
+            }
           },
-        },
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                borderRadius: '9999px',
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                }
+              }
+            }
+          }
+        }
       }),
-    [mode]
+    [mode, isScrolled]
   );
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="sticky" color="default" elevation={1}>
+      
+      <AppBar 
+        position="fixed" 
+        elevation={isScrolled ? 1 : 0}
+      >
         <Container maxWidth="lg">
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              centered
-              indicatorColor="primary"
-              textColor="primary"
-              sx={{ flex: 1 }}
+          <Box className="flex items-center justify-between h-16">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className="sm:hidden"
             >
-              <Tab label="About" />
-              <Tab label="Skills" />
-              <Tab label="Projects" />
-              <Tab label="Resume" />
-              <Tab label="Contact" />
-            </Tabs>
+              <MenuIcon />
+            </IconButton>
+
+            <Box className="hidden sm:flex items-center justify-center flex-1 gap-2">
+              {sections.map((section, index) => (
+                <IconButton
+                  key={section}
+                  onClick={() => setActiveSection(index)}
+                  sx={{
+                    borderRadius: '9999px',
+                    px: 3,
+                    py: 1,
+                    color: activeSection === index ? 'primary.main' : 'inherit',
+                    backgroundColor: activeSection === index 
+                      ? mode === 'light' ? 'rgba(33, 150, 243, 0.08)' : 'rgba(144, 202, 249, 0.08)'
+                      : 'transparent',
+                    '&:hover': {
+                      backgroundColor: mode === 'light' 
+                        ? 'rgba(0, 0, 0, 0.04)' 
+                        : 'rgba(255, 255, 255, 0.08)'
+                    }
+                  }}
+                >
+                  {section}
+                </IconButton>
+              ))}
+            </Box>
+
             <IconButton 
               onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
               color="inherit"
-              sx={{ ml: 2 }}
             >
               {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
             </IconButton>
-          </div>
+          </Box>
         </Container>
       </AppBar>
 
-      <Container 
-        maxWidth="lg" 
-        sx={{ 
-          mt: 4, 
-          mb: 4,
-          minHeight: 'calc(100vh - 64px)',
-          animation: 'fadeIn 0.5s ease-in-out',
-          '@keyframes fadeIn': {
-            '0%': {
-              opacity: 0,
-              transform: 'translateY(10px)',
-            },
-            '100%': {
-              opacity: 1,
-              transform: 'translateY(0)',
-            },
-          },
+      <Drawer
+        variant="temporary"
+        anchor="left"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
         }}
       >
-        {value === 0 && <About />}
-        {value === 1 && <Skills />}
-        {value === 2 && <Projects />}
-        {value === 3 && <Resume />}
-        {value === 4 && <Contact />}
+        <List>
+          {sections.map((section, index) => (
+            <ListItem 
+              button 
+              key={section}
+              onClick={() => {
+                setActiveSection(index);
+                handleDrawerToggle();
+              }}
+              selected={activeSection === index}
+            >
+              <ListItemText primary={section} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+
+      <Container 
+        component="main" 
+        maxWidth="lg"
+        sx={{
+          pt: '80px',
+          minHeight: '100vh',
+          animation: 'fadeIn 0.5s ease-in-out',
+          '@keyframes fadeIn': {
+            from: {
+              opacity: 0,
+              transform: 'translateY(10px)'
+            },
+            to: {
+              opacity: 1,
+              transform: 'translateY(0)'
+            }
+          }
+        }}
+      >
+        {activeSection === 0 && <About />}
+        {activeSection === 1 && <Skills />}
+        {activeSection === 2 && <Projects />}
+        {activeSection === 3 && <Resume />}
+        {activeSection === 4 && <Contact />}
       </Container>
+
+      <ScrollTop />
+
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={() => setNotification({ ...notification, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert 
+          onClose={() => setNotification({ ...notification, open: false })} 
+          severity={notification.severity}
+          variant="filled"
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
 }

@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
-  CardMedia,
   Typography,
-  Grid,
   Button,
+  Grid,
   Box,
   Chip,
-  Stack,
+  Skeleton,
+  CardMedia,
+  CardActions,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LaunchIcon from "@mui/icons-material/Launch";
 
-// CHANGE THIS to your GitHub username
 const GITHUB_USERNAME = "Srinivas-2410";
 
 const projects = [
   {
-    title: "Project 1",
-    description: "Description of project 1",
-    image: "/project1.jpg",
-    technologies: ["React", "Node.js", "MongoDB"],
-    github: "https://github.com/Srinivas-2410/project1",
-    demo: "https://demo.project1.com",
+    title: "Portfolio Website",
+    description:
+      "Personal portfolio website built with React, Material UI, and Tailwind CSS.",
+    image: "/portfolio.png",
+    technologies: ["React", "Material UI", "Tailwind CSS", "Node.js"],
+    github: "https://github.com/Srinivas-2410/portfolio",
+    demo: "https://srinivas-portfolio.vercel.app",
   },
   // Add more projects as needed
 ];
@@ -34,100 +35,157 @@ export default function Projects() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setLoading(true);
-    fetch(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
-    )
-      .then((res) => {
-        if (!res.ok) throw new Error("Could not fetch repositories");
-        return res.json();
-      })
-      .then(setRepos)
-      .catch(() => setError("Could not fetch repositories."))
-      .finally(() => setLoading(false));
+    const fetchRepos = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`
+        );
+        if (!response.ok) throw new Error("Failed to fetch repositories");
+        const data = await response.json();
+        setRepos(data);
+      } catch {
+        setError("Could not fetch repositories.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();
   }, []);
 
   return (
-    <section id="projects" className="mb-16">
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
-        Projects
-      </Typography>
-      <Grid container spacing={4}>
-        {projects.map((project, idx) => (
-          <Grid item xs={12} md={6} key={idx}>
-            <Card elevation={3}>
-              <CardMedia
-                component="img"
-                height="200"
-                image={project.image}
-                alt={project.title}
-              />
-              <CardContent>
-                <Typography variant="h5" gutterBottom>
-                  {project.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" paragraph>
-                  {project.description}
-                </Typography>
+    <section className="min-h-screen px-4 py-10">
+      <Box className="max-w-6xl mx-auto space-y-8">
+        <Typography variant="h3" className="text-center font-bold">
+          Featured Projects
+        </Typography>
 
-                <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                  {project.technologies.map((tech) => (
-                    <Chip key={tech} label={tech} size="small" />
-                  ))}
-                </Stack>
-
-                <Box sx={{ display: "flex", gap: 2 }}>
+        {/* Featured Projects */}
+        <Grid container spacing={4}>
+          {projects.map((project, idx) => (
+            <Grid item xs={12} md={6} key={idx}>
+              <Card
+                className="h-full transform transition-all duration-300 hover:shadow-xl"
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  background: "rgba(255, 255, 255, 0.8)",
+                  backdropFilter: "blur(10px)",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={project.image}
+                  alt={project.title}
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <CardContent className="flex-grow">
+                  <Typography variant="h5" gutterBottom>
+                    {project.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    {project.description}
+                  </Typography>
+                  <Box className="flex flex-wrap gap-2 mb-4">
+                    {project.technologies.map((tech) => (
+                      <Chip
+                        key={tech}
+                        label={tech}
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                      />
+                    ))}
+                  </Box>
+                </CardContent>
+                <CardActions className="p-4">
                   <Button
                     variant="outlined"
+                    size="small"
                     startIcon={<GitHubIcon />}
                     href={project.github}
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     Code
                   </Button>
                   <Button
                     variant="contained"
+                    size="small"
                     startIcon={<LaunchIcon />}
                     href={project.demo}
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     Demo
                   </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      {loading ? (
-        <div className="text-lg text-blue-600">Loading projects...</div>
-      ) : error ? (
-        <div className="text-red-600">{error}</div>
-      ) : (
-        <div className="grid md:grid-cols-2 gap-8">
-          {repos.slice(0, 6).map((repo) => (
-            <div
-              key={repo.id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-[1.03] hover:shadow-xl transition-transform dark:bg-gray-800"
-            >
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{repo.name}</h3>
-                <p className="mb-3 line-clamp-3">
-                  {repo.description || "No description provided."}
-                </p>
-                <a
-                  href={repo.html_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 font-medium hover:underline"
-                >
-                  GitHub ↗
-                </a>
-              </div>
-            </div>
+                </CardActions>
+              </Card>
+            </Grid>
           ))}
-        </div>
-      )}
+        </Grid>
+
+        {/* GitHub Repositories */}
+        <Typography variant="h4" className="text-center font-bold mt-16">
+          Recent GitHub Activity
+        </Typography>
+        <Grid container spacing={4}>
+          {loading ? (
+            // Loading skeletons
+            [...Array(6)].map((_, i) => (
+              <Grid item xs={12} md={6} key={i}>
+                <Card className="p-4">
+                  <Skeleton variant="text" width="60%" height={32} />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="80%" />
+                </Card>
+              </Grid>
+            ))
+          ) : error ? (
+            <Box className="w-full text-center text-red-500">
+              <Typography color="error">{error}</Typography>
+            </Box>
+          ) : (
+            // GitHub repositories
+            repos.map((repo) => (
+              <Grid item xs={12} md={6} key={repo.id}>
+                <Card
+                  className="h-full transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  sx={{
+                    background: "rgba(255, 255, 255, 0.8)",
+                    backdropFilter: "blur(10px)",
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      {repo.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      className="mb-4 line-clamp-2"
+                    >
+                      {repo.description || "No description provided."}
+                    </Typography>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<GitHubIcon />}
+                      href={repo.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Repository
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))
+          )}
+        </Grid>
+      </Box>
     </section>
   );
 }
