@@ -1,65 +1,118 @@
 import React from "react";
 import {
-  Card,
-  CardContent,
   Typography,
   Button,
   Box,
+  Container,
+  Fade,
+  useTheme,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import PreviewIcon from '@mui/icons-material/Preview';
 
 export default function Resume() {
-  return (
-    <section className="min-h-screen flex items-center justify-center px-4 py-10">
-      <Card 
-        elevation={3}
-        className="w-full max-w-lg transform transition-all duration-300 hover:shadow-xl"
-        sx={{
-          background: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: 2
-        }}
-      >
-        <CardContent className="p-8">
-          <Typography variant="h3" className="text-center font-bold mb-6">
-            Resume
-          </Typography>
-          
-          <Typography 
-            variant="body1" 
-            className="text-center text-gray-600 dark:text-gray-300 mb-8"
-          >
-            Download my latest resume to learn more about my experience and skills.
-          </Typography>
+  const theme = useTheme();
 
-          <Box className="flex justify-center">
-            <Button
-              variant="contained"
-              startIcon={<DownloadIcon />}
-              href="/resume.pdf"
-              download
-              className="w-full sm:w-auto group hover:shadow-lg"
+  return (
+    <section className="min-h-screen flex items-center justify-center">
+      <Fade in timeout={1000}>
+        <Container maxWidth="md">
+          <Box 
+            sx={{ 
+              textAlign: 'center',
+              py: { xs: 4, md: 8 }
+            }}
+          >
+            <Typography 
+              variant="h2" 
+              className="font-bold mb-8"
               sx={{
-                py: 1.5,
-                px: 4,
-                transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-2px)'
-                }
+                fontSize: { xs: '2.5rem', md: '3.5rem' },
+                background: theme.palette.mode === 'dark'
+                  ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
+                  : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mb: 6
               }}
             >
-              Download Resume
-            </Button>
-          </Box>
+              Resume
+            </Typography>
 
-          <Typography 
-            variant="caption" 
-            className="block text-center mt-6 text-gray-500"
-          >
-            PDF format • Last updated June 2023
-          </Typography>
-        </CardContent>
-      </Card>
+            <Box 
+              sx={{ 
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: 3,
+                justifyContent: 'center',
+                maxWidth: 'sm',
+                mx: 'auto',
+                px: 2
+              }}
+            >
+              <Button
+                variant="outlined"
+                size="large"
+                startIcon={<PreviewIcon />}
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  borderColor: theme.palette.mode === 'dark' 
+                    ? 'rgba(255, 255, 255, 0.23)' 
+                    : 'rgba(0, 0, 0, 0.23)',
+                  color: theme.palette.mode === 'dark' 
+                    ? 'white' 
+                    : 'inherit',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  transition: 'all 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    borderColor: theme.palette.mode === 'dark' 
+                      ? '#93c5fd' 
+                      : '#6366f1',
+                    backgroundColor: theme.palette.mode === 'dark'
+                      ? 'rgba(147, 197, 253, 0.08)'
+                      : 'rgba(99, 102, 241, 0.08)',
+                  }
+                }}
+              >
+                View Resume
+              </Button>
+
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<DownloadIcon />}
+                href="/resume.pdf"
+                download
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  transition: 'all 0.2s ease-in-out',
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
+                    : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    background: theme.palette.mode === 'dark'
+                      ? 'linear-gradient(135deg, #a5b4fc 0%, #93c5fd 100%)'
+                      : 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                  }
+                }}
+              >
+                Download Resume
+              </Button>
+            </Box>
+          </Box>
+        </Container>
+      </Fade>
     </section>
   );
 }

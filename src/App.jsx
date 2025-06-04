@@ -1,34 +1,43 @@
-import { useState, useMemo, useEffect } from 'react';
-import { 
-  AppBar, 
-  Container, 
-  ThemeProvider, 
-  createTheme,
-  CssBaseline,
-  IconButton,
-  useMediaQuery,
+import React, { useState, useEffect, useMemo } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
   Box,
+  IconButton,
   Drawer,
   List,
   ListItem,
   ListItemText,
-  useScrollTrigger,
-  Fade,
+  useMediaQuery,
+  createTheme,
+  ThemeProvider,
   Fab,
+  Zoom,
+  useScrollTrigger,
   Snackbar,
-  Alert
+  Alert,
+  Button,
+  Avatar,
+  Chip,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import About from './components/About.jsx';
-import Skills from './components/Skills.jsx';
-import Projects from './components/Projects.jsx';
-import Resume from './components/Resume.jsx';
-import Contact from './components/Contact.jsx';
+import {
+  Menu as MenuIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+  LightMode,
+  DarkMode,
+  GitHub,
+  LinkedIn,
+  Email,
+  Phone,
+} from '@mui/icons-material';
+import About from './components/About';
+import Skills from './components/Skills';
+import Projects from './components/Projects';
+import Resume from './components/Resume';
+import Contact from './components/Contact';
 
-// Scroll to Top Component
 function ScrollTop() {
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -40,31 +49,27 @@ function ScrollTop() {
   };
 
   return (
-    <Fade in={trigger}>
-      <Box
+    <Zoom in={trigger}>
+      <Fab
         onClick={handleClick}
+        color="primary"
+        size="small"
+        aria-label="scroll back to top"
         sx={{
           position: 'fixed',
-          bottom: 16,
-          right: 16,
-          zIndex: 50
+          bottom: 24,
+          right: 24,
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          '&:hover': {
+            background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+            transform: 'scale(1.1)',
+          },
+          transition: 'all 0.3s ease',
         }}
       >
-        <Fab
-          color="primary"
-          size="small"
-          aria-label="scroll back to top"
-          sx={{
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              transition: 'transform 0.2s ease-in-out'
-            }
-          }}
-        >
-          <KeyboardArrowUpIcon />
-        </Fab>
-      </Box>
-    </Fade>
+        <KeyboardArrowUpIcon />
+      </Fab>
+    </Zoom>
   );
 }
 
@@ -77,10 +82,8 @@ function App() {
   const [notification, setNotification] = useState({
     open: false,
     message: '',
-    severity: 'success'
+    severity: 'success',
   });
-
-  const sections = ['About', 'Skills', 'Projects', 'Resume', 'Contact'];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,30 +99,38 @@ function App() {
         palette: {
           mode,
           primary: {
-            main: mode === 'light' ? '#2196f3' : '#90caf9',
+            main: mode === 'dark' ? '#bb86fc' : '#6366f1',
+            light: mode === 'dark' ? '#d1c4e9' : '#818cf8',
+            dark: mode === 'dark' ? '#7c4dff' : '#4f46e5',
           },
           secondary: {
-            main: mode === 'light' ? '#f50057' : '#f73378',
+            main: mode === 'dark' ? '#03dac6' : '#06b6d4',
           },
           background: {
-            default: mode === 'light' ? '#f5f5f5' : '#121212',
-            paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
+            default: mode === 'dark' ? '#0f0f23' : '#fafafa',
+            paper: mode === 'dark' ? '#1a1a2e' : '#ffffff',
+          },
+          text: {
+            primary: mode === 'dark' ? '#e8eaed' : '#1f2937',
+            secondary: mode === 'dark' ? '#bdc3c7' : '#6b7280',
           },
         },
         typography: {
-          fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-          h4: {
-            fontSize: '2rem',
+          fontFamily: "'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+          h1: {
             fontWeight: 700,
-            letterSpacing: '-0.01562em',
+            background: mode === 'dark' 
+              ? 'linear-gradient(135deg, #bb86fc 0%, #03dac6 100%)'
+              : 'linear-gradient(135deg, #6366f1 0%, #06b6d4 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
           },
-          body1: {
-            fontSize: '1rem',
-            lineHeight: 1.7,
-            letterSpacing: '0.00938em',
+          h2: {
+            fontWeight: 600,
+            color: mode === 'dark' ? '#e8eaed' : '#1f2937',
           },
-          button: {
-            textTransform: 'none',
+          h3: {
             fontWeight: 600,
           },
         },
@@ -127,162 +138,303 @@ function App() {
           MuiAppBar: {
             styleOverrides: {
               root: {
-                backdropFilter: 'blur(8px)',
-                backgroundColor: mode === 'light' 
-                  ? 'rgba(255, 255, 255, 0.8)' 
-                  : 'rgba(18, 18, 18, 0.8)',
+                background: mode === 'dark' 
+                  ? 'rgba(26, 26, 46, 0.9)'
+                  : 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(20px)',
+                borderBottom: `1px solid ${mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
                 boxShadow: isScrolled 
-                  ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
+                  ? '0 8px 32px rgba(0, 0, 0, 0.1)'
                   : 'none',
-                transition: 'all 0.3s ease-in-out',
-              }
-            }
+                transition: 'all 0.3s ease',
+              },
+            },
           },
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: '9999px',
-                transition: 'all 0.2s ease-in-out',
+                borderRadius: '12px',
+                textTransform: 'none',
+                fontWeight: 500,
+                padding: '8px 24px',
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 '&:hover': {
+                  background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
                   transform: 'translateY(-2px)',
-                }
-              }
-            }
-          }
-        }
+                  boxShadow: '0 8px 25px rgba(99, 102, 241, 0.3)',
+                },
+                transition: 'all 0.3s ease',
+              },
+            },
+          },
+          MuiChip: {
+            styleOverrides: {
+              root: {
+                background: mode === 'dark' 
+                  ? 'rgba(187, 134, 252, 0.1)'
+                  : 'rgba(99, 102, 241, 0.1)',
+                color: mode === 'dark' ? '#bb86fc' : '#6366f1',
+                border: `1px solid ${mode === 'dark' ? 'rgba(187, 134, 252, 0.3)' : 'rgba(99, 102, 241, 0.3)'}`,
+                '&:hover': {
+                  background: mode === 'dark' 
+                    ? 'rgba(187, 134, 252, 0.2)'
+                    : 'rgba(99, 102, 241, 0.2)',
+                },
+              },
+            },
+          },
+        },
       }),
     [mode, isScrolled]
   );
+
+  const sections = [
+    { name: 'About', component: <About /> },
+    { name: 'Skills', component: <Skills /> },
+    { name: 'Projects', component: <Projects /> },
+    { name: 'Resume', component: <Resume /> },
+    { name: 'Contact', component: <Contact /> },
+  ];
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const socialLinks = [
+    { icon: <GitHub />, url: 'https://github.com/yourusername', label: 'GitHub' },
+    { icon: <LinkedIn />, url: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
+    { icon: <Email />, url: 'mailto:your.email@example.com', label: 'Email' },
+  ];
+
+  const drawer = (
+    <Box
+      sx={{
+        width: 280,
+        height: '100%',
+        background: mode === 'dark' 
+          ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
+          : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+        padding: 3,
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+        <Avatar
+          sx={{
+            width: 56,
+            height: 56,
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            mr: 2,
+          }}
+        >
+          YN
+        </Avatar>
+        <Box>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Your Name
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Full Stack Developer
+          </Typography>
+        </Box>
+      </Box>
+
+      <List sx={{ '& .MuiListItem-root': { borderRadius: 2, mb: 1 } }}>
+        {sections.map((section, index) => (
+          <ListItem
+            button
+            key={section.name}
+            onClick={() => {
+              setActiveSection(index);
+              handleDrawerToggle();
+            }}
+            sx={{
+              backgroundColor: activeSection === index 
+                ? (mode === 'dark' ? 'rgba(187, 134, 252, 0.1)' : 'rgba(99, 102, 241, 0.1)')
+                : 'transparent',
+              '&:hover': {
+                backgroundColor: mode === 'dark' 
+                  ? 'rgba(187, 134, 252, 0.05)'
+                  : 'rgba(99, 102, 241, 0.05)',
+              },
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <ListItemText
+              primary={section.name}
+              sx={{
+                '& .MuiTypography-root': {
+                  fontWeight: activeSection === index ? 600 : 400,
+                  color: activeSection === index 
+                    ? (mode === 'dark' ? '#bb86fc' : '#6366f1')
+                    : 'inherit',
+                },
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+
+      <Box sx={{ mt: 'auto', pt: 3 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Connect with me
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {socialLinks.map((link, index) => (
+            <IconButton
+              key={index}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                background: mode === 'dark' 
+                  ? 'rgba(187, 134, 252, 0.1)'
+                  : 'rgba(99, 102, 241, 0.1)',
+                '&:hover': {
+                  background: mode === 'dark' 
+                    ? 'rgba(187, 134, 252, 0.2)'
+                    : 'rgba(99, 102, 241, 0.2)',
+                  transform: 'translateY(-2px)',
+                },
+                transition: 'all 0.3s ease',
+              }}
+            >
+              {link.icon}
+            </IconButton>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      
-      <AppBar 
-        position="fixed" 
-        elevation={isScrolled ? 1 : 0}
+      <Box
+        sx={{
+          minHeight: '100vh',
+          background: mode === 'dark'
+            ? 'radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f23 100%)'
+            : 'radial-gradient(ellipse at top, #f8fafc 0%, #e2e8f0 100%)',
+        }}
       >
-        <Container maxWidth="lg">
-          <Box className="flex items-center justify-between h-16">
+        <AppBar position="fixed" elevation={0}>
+          <Toolbar>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              className="sm:hidden"
+              sx={{ mr: 2, display: { md: 'none' } }}
             >
               <MenuIcon />
             </IconButton>
 
-            <Box className="hidden sm:flex items-center justify-center flex-1 gap-2">
+            <Typography
+              variant="h6"
+              sx={{
+                flexGrow: 1,
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Srinivas
+            </Typography>
+
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, mr: 2 }}>
               {sections.map((section, index) => (
-                <IconButton
-                  key={section}
+                <Button
+                  key={section.name}
                   onClick={() => setActiveSection(index)}
                   sx={{
-                    borderRadius: '9999px',
-                    px: 3,
-                    py: 1,
-                    color: activeSection === index ? 'primary.main' : 'inherit',
-                    backgroundColor: activeSection === index 
-                      ? mode === 'light' ? 'rgba(33, 150, 243, 0.08)' : 'rgba(144, 202, 249, 0.08)'
+                    color: activeSection === index 
+                      ? theme.palette.primary.main
+                      : theme.palette.text.primary,
+                    background: activeSection === index 
+                      ? 'rgba(99, 102, 241, 0.1)'
                       : 'transparent',
                     '&:hover': {
-                      backgroundColor: mode === 'light' 
-                        ? 'rgba(0, 0, 0, 0.04)' 
-                        : 'rgba(255, 255, 255, 0.08)'
-                    }
+                      background: 'rgba(99, 102, 241, 0.1)',
+                    },
+                    borderRadius: 2,
+                    px: 2,
                   }}
                 >
-                  {section}
-                </IconButton>
+                  {section.name}
+                </Button>
               ))}
             </Box>
 
-            <IconButton 
+            <IconButton
               onClick={() => setMode(mode === 'light' ? 'dark' : 'light')}
-              color="inherit"
-            >
-              {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-            </IconButton>
-          </Box>
-        </Container>
-      </AppBar>
-
-      <Drawer
-        variant="temporary"
-        anchor="left"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
-        }}
-      >
-        <List>
-          {sections.map((section, index) => (
-            <ListItem 
-              button 
-              key={section}
-              onClick={() => {
-                setActiveSection(index);
-                handleDrawerToggle();
+              sx={{
+                background: 'rgba(99, 102, 241, 0.1)',
+                '&:hover': {
+                  background: 'rgba(99, 102, 241, 0.2)',
+                  transform: 'rotate(180deg)',
+                },
+                transition: 'all 0.3s ease',
               }}
-              selected={activeSection === index}
             >
-              <ListItemText primary={section} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+              {mode === 'light' ? <DarkMode /> : <LightMode />}
+            </IconButton>
+          </Toolbar>
+        </AppBar>
 
-      <Container 
-        component="main" 
-        maxWidth="lg"
-        sx={{
-          pt: '80px',
-          minHeight: '100vh',
-          animation: 'fadeIn 0.5s ease-in-out',
-          '@keyframes fadeIn': {
-            from: {
-              opacity: 0,
-              transform: 'translateY(10px)'
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: 280,
+              border: 'none',
             },
-            to: {
-              opacity: 1,
-              transform: 'translateY(0)'
-            }
-          }
-        }}
-      >
-        {activeSection === 0 && <About />}
-        {activeSection === 1 && <Skills />}
-        {activeSection === 2 && <Projects />}
-        {activeSection === 3 && <Resume />}
-        {activeSection === 4 && <Contact />}
-      </Container>
-
-      <ScrollTop />
-
-      <Snackbar
-        open={notification.open}
-        autoHideDuration={6000}
-        onClose={() => setNotification({ ...notification, open: false })}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      >
-        <Alert 
-          onClose={() => setNotification({ ...notification, open: false })} 
-          severity={notification.severity}
-          variant="filled"
+          }}
         >
-          {notification.message}
-        </Alert>
-      </Snackbar>
+          {drawer}
+        </Drawer>
+
+        <Box component="main" sx={{ pt: 8 }}>
+          <Container maxWidth="lg">
+            <Box
+              sx={{
+                minHeight: 'calc(100vh - 64px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                py: 4,
+              }}
+            >
+              {sections[activeSection].component}
+            </Box>
+          </Container>
+        </Box>
+
+        <ScrollTop />
+
+        <Snackbar
+          open={notification.open}
+          autoHideDuration={6000}
+          onClose={() => setNotification({ ...notification, open: false })}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <Alert
+            onClose={() => setNotification({ ...notification, open: false })}
+            severity={notification.severity}
+            sx={{
+              width: '100%',
+              borderRadius: 2,
+              backdropFilter: 'blur(20px)',
+            }}
+          >
+            {notification.message}
+          </Alert>
+        </Snackbar>
+      </Box>
     </ThemeProvider>
   );
 }

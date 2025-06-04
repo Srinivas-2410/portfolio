@@ -1,169 +1,212 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
-  Card,
-  CardContent,
-  Avatar,
-  Typography,
   Box,
-  Tooltip,
+  Typography,
+  Container,
+  Button,
+  Fade,
+  useTheme,
   IconButton,
-  Grid,
-} from "@mui/material";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EmailIcon from "@mui/icons-material/Email";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import WorkIcon from "@mui/icons-material/Work";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import PeopleIcon from "@mui/icons-material/People";
+} from '@mui/material';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import EmailIcon from '@mui/icons-material/Email';
+import DownloadIcon from '@mui/icons-material/Download';
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
-  const stats = [
-    { icon: <WorkIcon />, label: 'Years Experience', value: '3+' },
-    { icon: <AssignmentIcon />, label: 'Projects Completed', value: '25+' },
-    { icon: <PeopleIcon />, label: 'Happy Clients', value: '15+' },
-  ];
-
   return (
-    <section className="min-h-screen flex items-center justify-center p-4">
-      <Card
-        elevation={3}
-        className={`w-full max-w-2xl transform transition-all duration-500 ${
-          isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-        }`}
-        sx={{
-          background: "rgba(255, 255, 255, 0.8)",
-          backdropFilter: "blur(10px)",
-          borderRadius: 2,
-        }}
+    <Container maxWidth="lg">
+      <Box 
+        className="min-h-screen flex flex-col justify-center"
+        sx={{ position: 'relative' }}
       >
-        <CardContent className="p-8">
-          <Box className="flex flex-col items-center space-y-8">
-            {/* Profile Image with Hover Effect */}
-            <Tooltip title="Full Stack Developer based in Bangalore, India">
-              <Avatar
-                src="/photo.png"
-                alt="Profile Picture"
-                sx={{
-                  width: 128,
-                  height: 128,
-                  border: "4px solid rgba(59, 130, 246, 0.2)",
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              />
-            </Tooltip>
+        {/* Background Elements */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            overflow: 'hidden',
+            zIndex: -1,
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: '10%',
+              left: '5%',
+              width: '40%',
+              height: '40%',
+              background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)',
+              borderRadius: '50%',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: '10%',
+              right: '5%',
+              width: '35%',
+              height: '35%',
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
+              borderRadius: '50%',
+            }
+          }}
+        />
 
-            {/* Name and Title */}
-            <Box className="text-center space-y-2">
-              <Typography variant="h3" className="font-bold">
-                Srinivas K S
-              </Typography>
-              <Box
-                className="inline-block px-4 py-1.5 rounded-full"
-                sx={{
-                  backgroundColor: "primary.main",
-                  color: "white",
-                }}
-              >
-                <Typography variant="subtitle1">
-                  Full Stack Developer
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Stats */}
-            <Grid container spacing={3} className="justify-center">
-              {stats.map((stat, index) => (
-                <Grid item xs={12} sm={4} key={index}>
-                  <Box className="text-center p-4 rounded-lg hover:bg-white/50 transition-all">
-                    <Box className="flex justify-center mb-2">
-                      {React.cloneElement(stat.icon, { 
-                        sx: { fontSize: 32, color: 'primary.main' }
-                      })}
-                    </Box>
-                    <Typography variant="h4" className="font-bold text-primary">
-                      {stat.value}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {stat.label}
-                    </Typography>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-
-            {/* Bio */}
+        <Fade in={isVisible} timeout={1000}>
+          <Box className="text-center space-y-6 relative">
+            {/* Main Heading */}
             <Typography
-              variant="body1"
-              className="text-center max-w-lg"
-              color="text.secondary"
+              variant="h1"
+              className="text-4xl md:text-6xl lg:text-7xl font-bold"
+              sx={{
+                background: theme.palette.mode === 'dark'
+                  ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
+                  : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mb: 2,
+              }}
             >
-              I am a Generalist Software Engineer with a passion for building
-              scalable web applications and working with modern technologies. I
-              have experience in both front-end and back-end development, and I
-              love creating efficient, user-friendly solutions.
+              Srinivas K S
             </Typography>
 
+            {/* Subtitle */}
+            <Typography
+              variant="h2"
+              className="text-xl md:text-2xl font-light"
+              sx={{
+                mb: 4,
+                color: theme.palette.mode === 'dark'
+                  ? 'rgba(255, 255, 255, 0.7)'
+                  : 'text.secondary',
+                textAlign: 'center',
+              }}
+            >
+              Full Stack Developer
+            </Typography>
+
+            {/* Description */}
+            
+
+            {/* CTA Buttons */}
+            <Box className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Button
+                variant="contained"
+                size="large"
+                href="#contact"
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  fontSize: '1.1rem',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Let's Connect
+              </Button>
+              
+              <Button
+                variant="outlined"
+                size="large"
+                startIcon={<DownloadIcon />}
+                href="/resume.pdf"
+                download
+                sx={{
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1.1rem',
+                  borderColor: theme.palette.mode === 'dark'
+                    ? 'rgba(255, 255, 255, 0.23)'
+                    : 'rgba(0, 0, 0, 0.23)',
+                  color: theme.palette.mode === 'dark'
+                    ? 'white'
+                    : 'inherit',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
+                    borderColor: theme.palette.mode === 'dark'
+                      ? 'white'
+                      : 'primary.main',
+                    backgroundColor: theme.palette.mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.05)'
+                      : 'rgba(0, 0, 0, 0.05)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                Download CV
+              </Button>
+            </Box>
+
             {/* Social Links */}
-            <Box className="flex gap-4">
+            <Box className="flex justify-center gap-4">
               <IconButton
-                href="https://github.com/Srinivas-2410"
+                href="https://github.com/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform"
                 sx={{
-                  "&:hover": { color: "primary.main" },
+                  '&:hover': { color: 'primary.main' },
+                  width: 48,
+                  height: 48,
                 }}
               >
-                <GitHubIcon />
+                <GitHubIcon fontSize="large" />
               </IconButton>
-
+              
               <IconButton
-                href="https://linkedin.com/in/srinivas-k-s"
+                href="https://linkedin.com/in/yourusername"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:scale-110 transition-transform"
                 sx={{
-                  "&:hover": { color: "primary.main" },
+                  '&:hover': { color: 'primary.main' },
+                  width: 48,
+                  height: 48,
                 }}
               >
-                <LinkedInIcon />
+                <LinkedInIcon fontSize="large" />
               </IconButton>
-
+              
               <IconButton
-                href="mailto:srinivasks898@example.com"
+                href="mailto:your.email@example.com"
                 className="hover:scale-110 transition-transform"
                 sx={{
-                  "&:hover": { color: "primary.main" },
+                  '&:hover': { color: 'primary.main' },
+                  width: 48,
+                  height: 48,
                 }}
               >
-                <EmailIcon />
-              </IconButton>
-
-              <IconButton
-                href="https://x.com/srinivas07"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:scale-110 transition-transform"
-                sx={{
-                  "&:hover": { color: "primary.main" },
-                }}
-              >
-                <TwitterIcon />
+                <EmailIcon fontSize="large" />
               </IconButton>
             </Box>
+
+            {/* Scroll Indicator */}
+            <Box
+              className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"
+              sx={{ 
+                display: { xs: 'none', md: 'block' },
+                color: theme.palette.mode === 'dark' 
+                  ? 'rgba(255, 255, 255, 0.5)' 
+                  : 'rgba(0, 0, 0, 0.5)',
+              }}
+            >
+            </Box>
           </Box>
-        </CardContent>
-      </Card>
-    </section>
+        </Fade>
+      </Box>
+    </Container>
   );
 }
