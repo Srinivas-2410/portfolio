@@ -25,7 +25,11 @@ export default function About() {
     <Container maxWidth="lg">
       <Box 
         className="min-h-screen flex flex-col justify-center"
-        sx={{ position: 'relative' }}
+        sx={{ 
+          position: 'relative',
+          py: { xs: 4, sm: 6, md: 8 }, // Responsive padding
+          px: { xs: 2, sm: 3, md: 4 }  // Responsive padding
+        }}
       >
         {/* Background Elements */}
         <Box
@@ -61,19 +65,26 @@ export default function About() {
         />
 
         <Fade in={isVisible} timeout={1000}>
-          <Box className="text-center space-y-6 relative">
+          <Box className="text-center relative">
             {/* Main Heading */}
             <Typography
               variant="h1"
-              className="text-4xl md:text-6xl lg:text-7xl font-bold"
               sx={{
+                fontSize: { 
+                  xs: '2rem',     // Mobile
+                  sm: '2.5rem',   // Tablet
+                  md: '3.5rem',   // Desktop
+                  lg: '4rem'      // Large Desktop
+                },
+                fontWeight: 700,
                 background: theme.palette.mode === 'dark'
                   ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
                   : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
-                mb: 2,
+                mb: { xs: 2, sm: 3 },
+                lineHeight: 1.2
               }}
             >
               Srinivas K S
@@ -82,13 +93,18 @@ export default function About() {
             {/* Subtitle */}
             <Typography
               variant="h2"
-              className="text-xl md:text-2xl font-light"
               sx={{
-                mb: 4,
+                fontSize: { 
+                  xs: '1.25rem',  // Mobile
+                  sm: '1.5rem',   // Tablet
+                  md: '1.75rem'   // Desktop
+                },
+                fontWeight: 300,
+                mb: { xs: 3, sm: 4 },
                 color: theme.palette.mode === 'dark'
                   ? 'rgba(255, 255, 255, 0.7)'
                   : 'text.secondary',
-                textAlign: 'center',
+                lineHeight: 1.4
               }}
             >
               Full Stack Developer
@@ -97,99 +113,122 @@ export default function About() {
             {/* Description */}
             
 
-            {/* CTA Buttons */}
-            <Box className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button
-                variant="contained"
-                size="large"
-                href="#contact"
-                sx={{
-                  py: 1.5,
-                  px: 4,
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  fontSize: '1.1rem',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Let's Connect
-              </Button>
-              
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<DownloadIcon />}
-                href="/resume.pdf"
-                download
-                sx={{
-                  py: 1.5,
-                  px: 4,
-                  fontSize: '1.1rem',
-                  borderColor: theme.palette.mode === 'dark'
-                    ? 'rgba(255, 255, 255, 0.23)'
-                    : 'rgba(0, 0, 0, 0.23)',
-                  color: theme.palette.mode === 'dark'
-                    ? 'white'
-                    : 'inherit',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    borderColor: theme.palette.mode === 'dark'
-                      ? 'white'
-                      : 'primary.main',
-                    backgroundColor: theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(0, 0, 0, 0.05)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Download CV
-              </Button>
-            </Box>
+                  <Box className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+                    <Button
+                    variant="contained"
+                    size="large"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const contactSection = document.getElementById('contact');
+                      if (contactSection) {
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }}
+                    sx={{
+                      py: { xs: 1.25, sm: 1.5 },
+                      px: { xs: 3, sm: 4 },
+                      fontSize: { xs: '0.9rem', sm: '1.1rem' },
+                      width: { xs: '100%', sm: 'auto' },
+                      background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                      '&:hover': {
+                        background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                        transform: 'translateY(-2px)',
+                      },
+                      transition: 'all 0.3s ease',
+                    }}
+                    >
+                    Let's Connect
+                    </Button>
+                    
+                    <Button
+                    variant="outlined"
+                    size="large"
+                    startIcon={<DownloadIcon />}
+                    href="/resume.pdf"
+                    download
+                    sx={{
+                      py: { xs: 1.25, sm: 1.5 },
+                      px: { xs: 3, sm: 4 },
+                      fontSize: { xs: '0.9rem', sm: '1.1rem' },
+                      width: { xs: '100%', sm: 'auto' },
+                      borderColor: theme.palette.mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.23)'
+                        : 'rgba(0, 0, 0, 0.23)',
+                      color: theme.palette.mode === 'dark'
+                        ? 'white'
+                        : 'inherit',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        borderColor: theme.palette.mode === 'dark'
+                          ? 'white'
+                          : 'primary.main',
+                        backgroundColor: theme.palette.mode === 'dark'
+                          ? 'rgba(255, 255, 255, 0.05)'
+                          : 'rgba(0, 0, 0, 0.05)',
+                      },
+                      transition: 'all 0.3s ease',
+                    }}
+                    >
+                    Download CV
+                    </Button>
+                  </Box>
 
-            {/* Social Links */}
-            <Box className="flex justify-center gap-4">
+                  {/* Social Links */}
+            <Box 
+              sx={{ 
+                display: 'flex',
+                justifyContent: 'center',
+                gap: { xs: 2, sm: 3 },
+                mb: { xs: 4, sm: 6 }
+              }}
+            >
               <IconButton
-                href="https://github.com/yourusername"
+                href="https://github.com/Srinivas-2410"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:scale-110 transition-transform"
                 sx={{
-                  '&:hover': { color: 'primary.main' },
-                  width: 48,
-                  height: 48,
+                  width: { xs: 40, sm: 48 },
+                  height: { xs: 40, sm: 48 },
+                  '&:hover': { 
+                    color: 'primary.main',
+                    transform: 'scale(1.1)'
+                  },
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <GitHubIcon fontSize="large" />
+                <GitHubIcon sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }} />
               </IconButton>
               
               <IconButton
-                href="https://linkedin.com/in/yourusername"
+                href="https://linkedin.com/in/srinivas-k-s"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:scale-110 transition-transform"
                 sx={{
-                  '&:hover': { color: 'primary.main' },
-                  width: 48,
-                  height: 48,
+                  width: { xs: 40, sm: 48 },
+                  height: { xs: 40, sm: 48 },
+                  '&:hover': { 
+                    color: 'primary.main',
+                    transform: 'scale(1.1)'
+                  },
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <LinkedInIcon fontSize="large" />
+                <LinkedInIcon sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }} />
               </IconButton>
               
               <IconButton
-                href="mailto:your.email@example.com"
-                className="hover:scale-110 transition-transform"
+                href="mailto:srinivasks898@gmail.com"
                 sx={{
-                  '&:hover': { color: 'primary.main' },
-                  width: 48,
-                  height: 48,
+                  width: { xs: 40, sm: 48 },
+                  height: { xs: 40, sm: 48 },
+                  '&:hover': { 
+                    color: 'primary.main',
+                    transform: 'scale(1.1)'
+                  },
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <EmailIcon fontSize="large" />
+                <EmailIcon sx={{ fontSize: { xs: '1.5rem', sm: '2rem' } }} />
               </IconButton>
             </Box>
 

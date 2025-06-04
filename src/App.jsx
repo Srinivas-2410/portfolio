@@ -209,36 +209,67 @@ function App() {
   const drawer = (
     <Box
       sx={{
-        width: 280,
+        width: { xs: 260, sm: 280 }, // Responsive width
         height: '100%',
         background: mode === 'dark' 
           ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
           : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
-        padding: 3,
+        padding: { xs: 2, sm: 3 }, // Responsive padding
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        mb: 4,
+        flexWrap: 'wrap', // Allow wrapping on very small screens
+      }}>
         <Avatar
-          sx={{
-            width: 56,
-            height: 56,
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-            mr: 2,
-          }}
-        >
-          YN
-        </Avatar>
+  sx={{
+    width: { xs: 48, sm: 56 },
+    height: { xs: 48, sm: 56 },
+    background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    mr: 2,
+  }}
+>
+  <img
+    src="/image.png"
+    alt="Srinivas K S"
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover'
+    }}
+  />
+</Avatar>
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Your Name
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              fontWeight: 600,
+              fontSize: { xs: '1rem', sm: '1.25rem' }, // Responsive font size
+            }}
+          >
+            Srinivas K S
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{
+              fontSize: { xs: '0.875rem', sm: '1rem' }, // Responsive font size
+            }}
+          >
             Full Stack Developer
           </Typography>
         </Box>
       </Box>
-
-      <List sx={{ '& .MuiListItem-root': { borderRadius: 2, mb: 1 } }}>
+      
+      <List sx={{ 
+        '& .MuiListItem-root': { 
+          borderRadius: 2, 
+          mb: 1,
+          py: { xs: 1, sm: 1.5 }, // Responsive padding
+        } 
+      }}>
         {sections.map((section, index) => (
           <ListItem
             button
@@ -332,10 +363,14 @@ function App() {
               sx={{
                 flexGrow: 1,
                 fontWeight: 700,
+                fontSize: { xs: '1.25rem', sm: '1.5rem' }, // Responsive font size
                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
+                whiteSpace: 'nowrap', // Prevent text wrapping
+                overflow: 'hidden',
+                textOverflow: 'ellipsis', // Add ellipsis for overflow
               }}
             >
               Srinivas
@@ -390,23 +425,32 @@ function App() {
             display: { xs: 'block', md: 'none' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: 280,
+              width: { xs: 260, sm: 280 }, // Responsive width
               border: 'none',
+              overflowX: 'hidden', // Prevent horizontal scrolling
             },
           }}
         >
           {drawer}
         </Drawer>
 
-        <Box component="main" sx={{ pt: 8 }}>
-          <Container maxWidth="lg">
+        <Box component="main" sx={{ 
+          pt: { xs: 7, sm: 8 }, // Responsive top padding
+          px: { xs: 2, sm: 3 }, // Add horizontal padding for small screens
+        }}>
+          <Container 
+            maxWidth="lg"
+            sx={{
+              px: { xs: 1, sm: 2, md: 3 }, // Responsive container padding
+            }}
+          >
             <Box
               sx={{
-                minHeight: 'calc(100vh - 64px)',
+                minHeight: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)' }, // Adjust for different AppBar heights
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                py: 4,
+                py: { xs: 2, sm: 4 }, // Responsive vertical padding
               }}
             >
               {sections[activeSection].component}
