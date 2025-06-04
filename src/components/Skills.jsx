@@ -45,10 +45,47 @@ export default function Skills() {
       name: 'Frontend',
       icon: <CodeIcon />,
       skills: [
-        { name: 'HTML', icon: <HtmlIcon fontSize="large" /> },
-        { name: 'CSS', icon: <CssIcon fontSize="large" /> },
-        { name: 'JavaScript', icon: <JavascriptIcon fontSize="large" /> },
-        { name: 'React', icon: <FaReact size={28} /> },
+        { 
+          name: 'HTML', 
+          icon: <HtmlIcon 
+            sx={{ 
+              color: theme.palette.mode === 'dark' 
+                ? 'rgba(255, 255, 255, 0.9)' 
+                : 'rgba(0, 0, 0, 0.9)' 
+            }} 
+          /> 
+        },
+        { 
+          name: 'CSS', 
+          icon: <CssIcon 
+            sx={{ 
+              color: theme.palette.mode === 'dark' 
+                ? 'rgba(255, 255, 255, 0.9)' 
+                : 'rgba(0, 0, 0, 0.9)' 
+            }} 
+          /> 
+        },
+        { 
+          name: 'JavaScript', 
+          icon: <JavascriptIcon 
+            sx={{ 
+              color: theme.palette.mode === 'dark' 
+                ? 'rgba(255, 255, 255, 0.9)' 
+                : 'rgba(0, 0, 0, 0.9)' 
+            }} 
+          /> 
+        },
+        { 
+          name: 'React', 
+          icon: <FaReact 
+            size={28} 
+            style={{ 
+              color: theme.palette.mode === 'dark' 
+                ? 'rgba(255, 255, 255, 0.9)' 
+                : 'rgba(0, 0, 0, 0.9)' 
+            }} 
+          /> 
+        },
       ]
     },
     backend: {
@@ -75,147 +112,175 @@ export default function Skills() {
   };
 
   return (
-    <Container maxWidth="xl">
-      <Fade in timeout={1000}>
-        <Box 
-          sx={{ 
-            py: { xs: 6, md: 12 },
-            minHeight: '90vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 6
-          }}
-        >
-          <Typography
-            variant="h2"
-            className="text-center font-bold"
-            sx={{
-              fontSize: { xs: '2.5rem', md: '3.5rem', lg: '4rem' },
-              background: theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-                : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              mb: { xs: 4, md: 6 }
-            }}
-          >
-            Skills
-          </Typography>
-
-          <Tabs
-            value={activeCategory}
-            onChange={(e, newValue) => setActiveCategory(newValue)}
-            centered
-            sx={{
-              mb: { xs: 4, md: 8 },
-              '& .MuiTab-root': {
-                fontSize: { xs: '1rem', md: '1.25rem' },
-                minHeight: { xs: 48, md: 64 },
-                color: theme.palette.mode === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.7)' 
-                  : 'rgba(0, 0, 0, 0.7)',
-                '& .MuiSvgIcon-root': {
-                  fontSize: { xs: '1.5rem', md: '2rem' }
-                },
-                '&.Mui-selected': {
-                  color: theme.palette.mode === 'dark' 
-                    ? '#93c5fd' 
-                    : '#6366f1',
-                },
-                '&:hover': {
-                  color: theme.palette.mode === 'dark' 
-                    ? '#93c5fd' 
-                    : '#6366f1',
-                }
-              }
-            }}
-          >
-            {Object.entries(skillCategories).map(([key, category]) => (
-              <Tab
-                key={key}
-                value={key}
-                label={category.name}
-                icon={category.icon}
-              />
-            ))}
-          </Tabs>
-
-          <Grid 
-            container 
-            spacing={{ xs: 3, md: 5 }}
-            justifyContent="center"
-            alignItems="center"
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        py: { xs: 6, sm: 8, md: 10 },
+        overflow: 'hidden', // Prevent any potential horizontal scroll
+      }}
+    >
+      <Container 
+        maxWidth="lg"
+        sx={{ 
+          position: 'relative',
+          zIndex: 1
+        }}
+      >
+        <Fade in timeout={1000}>
+          <Box 
             sx={{ 
-              maxWidth: 1200, 
-              margin: '0 auto',
-              px: { xs: 2, md: 4 }
+              display: 'flex',
+              flexDirection: 'column',
+              gap: { xs: 4, sm: 6, md: 8 },
+              width: '100%'
             }}
           >
-            {skillCategories[activeCategory].skills.map((skill) => (
-              <Grid item xs={6} sm={4} md={3} key={skill.name}>
-                <Tooltip title={skill.name}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 2,
-                      padding: { xs: 3, md: 4 },
-                      borderRadius: 3,
-                      backgroundColor: theme.palette.mode === 'dark' 
-                        ? 'rgba(255, 255, 255, 0.05)' 
-                        : 'rgba(255, 255, 255, 0.8)',
-                      border: `1px solid ${theme.palette.mode === 'dark'
-                        ? 'rgba(255, 255, 255, 0.1)'
-                        : 'rgba(0, 0, 0, 0.1)'}`,
-                      color: theme.palette.mode === 'dark' 
-                        ? 'rgba(255, 255, 255, 0.8)' 
-                        : 'rgba(0, 0, 0, 0.8)',
-                      transition: 'all 0.3s ease',
-                      cursor: 'pointer',
-                      '& svg': {
-                        fontSize: { xs: '2.5rem', md: '3rem' },
-                        transition: 'transform 0.3s ease'
-                      },
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        backgroundColor: theme.palette.mode === 'dark'
-                          ? 'rgba(255, 255, 255, 0.1)'
-                          : 'rgba(255, 255, 255, 0.9)',
-                        borderColor: theme.palette.mode === 'dark'
-                          ? '#93c5fd'
-                          : '#6366f1',
-                        color: theme.palette.mode === 'dark' 
-                          ? '#93c5fd' 
-                          : '#6366f1',
-                        boxShadow: theme.palette.mode === 'dark'
-                          ? '0 8px 32px rgba(0, 0, 0, 0.4)'
-                          : '0 8px 32px rgba(0, 0, 0, 0.1)',
-                        '& svg': {
-                          transform: 'scale(1.1)'
-                        }
-                      }
-                    }}
-                  >
-                    {skill.icon}
-                    <Typography 
-                      variant="body1"
+            {/* Title Section */}
+            <Box sx={{ textAlign: 'center', mb: { xs: 4, sm: 6 } }}>
+              <Typography
+                variant="h2"
+                sx={{
+                  fontSize: { 
+                    xs: '2rem',
+                    sm: '2.5rem',
+                    md: '3rem',
+                    lg: '3.5rem'
+                  },
+                  fontWeight: 700,
+                  background: theme.palette.mode === 'dark'
+                    ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
+                    : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  mb: { xs: 1, sm: 2 }
+                }}
+              >
+                Skills
+              </Typography>
+            </Box>
+
+            {/* Tabs Section */}
+            <Box sx={{ width: '100%', overflowX: 'auto', mb: { xs: 3, sm: 4 } }}>
+              <Tabs
+                value={activeCategory}
+                onChange={(e, newValue) => setActiveCategory(newValue)}
+                variant="scrollable"
+                scrollButtons="auto"
+                allowScrollButtonsMobile
+                sx={{
+                  minHeight: { xs: 48, sm: 56 },
+                  '& .MuiTabs-flexContainer': {
+                    gap: { xs: 2, sm: 3 }
+                  },
+                  '& .MuiTab-root': {
+                    minHeight: { xs: 48, sm: 56 },
+                    fontSize: { xs: '0.875rem', sm: '1rem' },
+                    px: { xs: 2, sm: 3 },
+                    minWidth: 'auto',
+                    '& .MuiSvgIcon-root': {
+                      fontSize: { xs: '1.25rem', sm: '1.5rem' }
+                    }
+                  }
+                }}
+              >
+                {Object.entries(skillCategories).map(([key, category]) => (
+                  <Tab
+                    key={key}
+                    value={key}
+                    label={category.name}
+                    icon={category.icon}
+                  />
+                ))}
+              </Tabs>
+            </Box>
+
+            {/* Skills Grid */}
+            <Grid 
+              container 
+              spacing={{ xs: 2, sm: 3, md: 4 }}
+              sx={{ 
+                maxWidth: '100%',
+                margin: '0 auto',
+                justifyContent: 'center'
+              }}
+            >
+              {skillCategories[activeCategory].skills.map((skill) => (
+                <Grid 
+                  item 
+                  xs={6} 
+                  sm={4} 
+                  md={3} 
+                  key={skill.name}
+                >
+                  <Tooltip title={skill.name} arrow>
+                    <Box
                       sx={{
-                        fontWeight: 500,
-                        fontSize: { xs: '1rem', md: '1.25rem' }
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 2,
+                        p: { xs: 2, sm: 3 },
+                        borderRadius: 2,
+                        backgroundColor: theme.palette.mode === 'dark' 
+                          ? 'rgba(244, 238, 238, 0.05)' 
+                          : 'rgba(255, 255, 255, 0.8)',
+                        border: `1px solid ${theme.palette.mode === 'dark'
+                          ? 'rgba(255, 255, 255, 0.1)'
+                          : 'rgba(0, 0, 0, 0.1)'}`,
+                        transition: 'all 0.3s ease',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          backgroundColor: theme.palette.mode === 'dark'
+                            ? 'rgba(255, 255, 255, 0.1)'
+                            : 'rgba(255, 255, 255, 0.9)',
+                          borderColor: theme.palette.mode === 'dark'
+                            ? '#93c5fd'
+                            : '#6366f1',
+                          boxShadow: theme.palette.mode === 'dark'
+                            ? '0 4px 20px rgba(0, 0, 0, 0.4)'
+                            : '0 4px 20px rgba(0, 0, 0, 0.1)',
+                        }
                       }}
                     >
-                      {skill.name}
-                    </Typography>
-                  </Box>
-                </Tooltip>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </Fade>
-    </Container>
+                      {React.cloneElement(skill.icon, {
+                        sx: {
+                          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
+                          transition: 'all 0.3s ease',
+                          color: theme.palette.mode === 'dark' 
+                            ? 'rgba(255, 255, 255, 0.9)' 
+                            : 'rgba(0, 0, 0, 0.9)',
+                        }
+                      })}
+                      <Typography 
+                        variant="body2"
+                        sx={{
+                          fontWeight: 500,
+                          fontSize: {
+                            xs: '0.75rem',
+                            sm: '0.875rem',
+                            md: '1rem'
+                          },
+                          textAlign: 'center',
+                          color: theme.palette.mode === 'dark' 
+                            ? 'rgba(255, 255, 255, 0.9)' 
+                            : 'rgba(0, 0, 0, 0.9)',
+                        }}
+                      >
+                        {skill.name}
+                      </Typography>
+                    </Box>
+                  </Tooltip>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+        </Fade>
+      </Container>
+    </Box>
   );
 }
