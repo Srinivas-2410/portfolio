@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { 
+import {
   Box,
   Container,
-  TextField, 
-  Button, 
-  Typography, 
+  TextField,
+  Button,
+  Typography,
   Alert,
   Snackbar,
   Fade,
@@ -32,7 +32,10 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('http://localhost:5000/api/contact', {
+      // --- IMPORTANT CHANGE HERE ---
+      // Changed from 'http://localhost:5000/api/contact' to '/api/contact'
+      // When deployed on Vercel, this relative path will correctly point to your serverless function
+      const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fields),
@@ -46,13 +49,15 @@ export default function Contact() {
         });
         setFields({ name: "", email: "", message: "" });
       } else {
-        throw new Error();
+        // If the response is not OK, try to read error message from the response body
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Failed to send message on server');
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error sending message:", error); // Log the actual error
       setToast({
         open: true,
-        message: 'Failed to send message',
+        message: `Failed to send message: ${error.message || 'Unknown error'}`, // Display more descriptive error
         severity: 'error'
       });
     } finally {
@@ -102,7 +107,7 @@ export default function Contact() {
               gap: 3,
               p: { xs: 2, md: 4 },
               borderRadius: 2,
-              backgroundColor: theme.palette.mode === 'dark' 
+              backgroundColor: theme.palette.mode === 'dark'
                 ? 'rgba(255, 255, 255, 0.05)'
                 : 'rgba(255, 255, 255, 0.8)',
               backdropFilter: 'blur(10px)',
@@ -125,7 +130,7 @@ export default function Contact() {
                   transition: 'transform 0.2s ease-in-out',
                   transform: focused === 'name' ? 'scale(1.02)' : 'scale(1)',
                   '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark' 
+                    borderColor: theme.palette.mode === 'dark'
                       ? 'rgba(255, 255, 255, 0.23)'
                       : 'rgba(0, 0, 0, 0.23)',
                   },
@@ -142,7 +147,7 @@ export default function Contact() {
                 }
               }}
             />
-            
+
             <TextField
               fullWidth
               label="Email"
@@ -158,7 +163,7 @@ export default function Contact() {
                   transition: 'transform 0.2s ease-in-out',
                   transform: focused === 'email' ? 'scale(1.02)' : 'scale(1)',
                   '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark' 
+                    borderColor: theme.palette.mode === 'dark'
                       ? 'rgba(255, 255, 255, 0.23)'
                       : 'rgba(0, 0, 0, 0.23)',
                   },
@@ -175,7 +180,7 @@ export default function Contact() {
                 }
               }}
             />
-            
+
             <TextField
               fullWidth
               label="Message"
@@ -192,7 +197,7 @@ export default function Contact() {
                   transition: 'transform 0.2s ease-in-out',
                   transform: focused === 'message' ? 'scale(1.02)' : 'scale(1)',
                   '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark' 
+                    borderColor: theme.palette.mode === 'dark'
                       ? 'rgba(255, 255, 255, 0.23)'
                       : 'rgba(0, 0, 0, 0.23)',
                   },
@@ -209,7 +214,7 @@ export default function Contact() {
                 }
               }}
             />
-            
+
             <Button
               type="submit"
               variant="contained"
@@ -235,17 +240,17 @@ export default function Contact() {
         </Fade>
       </Box>
 
-      <Snackbar 
-        open={toast.open} 
-        autoHideDuration={6000} 
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={6000}
         onClose={() => setToast({ ...toast, open: false })}
       >
-        <Alert 
-          severity={toast.severity} 
+        <Alert
+          severity={toast.severity}
           variant="filled"
           sx={{
-            backgroundColor: toast.severity === 'success' 
-              ? '#10B981' 
+            backgroundColor: toast.severity === 'success'
+              ? '#10B981'
               : '#EF4444'
           }}
         >
@@ -255,4 +260,3 @@ export default function Contact() {
     </Container>
   );
 }
-
