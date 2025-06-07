@@ -201,9 +201,9 @@ function App() {
   };
 
   const socialLinks = [
-    { icon: <GitHub />, url: 'https://github.com/yourusername', label: 'GitHub' },
-    { icon: <LinkedIn />, url: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
-    { icon: <Email />, url: 'mailto:your.email@example.com', label: 'Email' },
+    { icon: <GitHub />, url: 'https://github.com/Srinivas-2410', label: 'GitHub' },
+    { icon: <LinkedIn />, url: 'https://linkedin.com/in/srinivas-k-s', label: 'LinkedIn' },
+    { icon: <Email />, url: 'mailto:srinivasks@gmail.com', label: 'Email' },
   ];
 
   const drawer = (
