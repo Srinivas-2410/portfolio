@@ -137,6 +137,7 @@ a {
     /* Improve text rendering */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* stylelint-disable-next-line at-rule-no-unknown */
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
