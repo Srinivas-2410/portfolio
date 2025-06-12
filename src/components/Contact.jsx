@@ -1,16 +1,8 @@
 import { useState } from 'react';
-import {
-  Box,
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Alert,
-  Snackbar,
-  Fade,
-  useTheme
-} from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Send } from 'lucide-react';
 
 export default function Contact() {
   const [fields, setFields] = useState({
@@ -18,23 +10,15 @@ export default function Contact() {
     email: "",
     message: ""
   });
-  const [focused, setFocused] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [toast, setToast] = useState({
-    open: false,
-    message: '',
-    severity: 'success'
-  });
-  const theme = useTheme();
+  const [confirmation, setConfirmation] = useState(""); // <-- NEW
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setConfirmation(""); // Clear previous message
 
     try {
-      // --- IMPORTANT CHANGE HERE ---
-      // Changed from 'http://localhost:5000/api/contact' to '/api/contact'
-      // When deployed on Vercel, this relative path will correctly point to your serverless function
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,221 +26,83 @@ export default function Contact() {
       });
 
       if (res.ok) {
-        setToast({
-          open: true,
-          message: 'Message sent successfully!',
-          severity: 'success'
-        });
         setFields({ name: "", email: "", message: "" });
+        setConfirmation("✅ Message sent successfully!");
       } else {
-        // If the response is not OK, try to read error message from the response body
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to send message on server');
+        setConfirmation(`❌ ${errorData.error || 'Failed to send message.'}`);
       }
     } catch (error) {
-      console.error("Error sending message:", error); // Log the actual error
-      setToast({
-        open: true,
-        message: `Failed to send message: ${error.message || 'Unknown error'}`, // Display more descriptive error
-        severity: 'error'
-      });
+      setConfirmation(`❌ Failed to send message: ${error.message || 'Unknown error'}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          minHeight: '90vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          py: { xs: 6, md: 12 },
-          gap: 6
-        }}
-      >
-        <Typography
-          variant="h2"
-          className="text-center font-bold"
-          sx={{
-            fontSize: { xs: '2.5rem', md: '3.5rem', lg: '4rem' },
-            background: theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-              : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            mb: { xs: 4, md: 6 }
-          }}
-        >
+    <div className="container max-w-6xl">
+      <div className="min-h-[90vh] flex flex-col justify-center py-6 md:py-12 gap-6">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-foreground font-sans">
           Contact Me
-        </Typography>
+        </h2>
 
-        <Fade in timeout={1000}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{
-              maxWidth: 'sm',
-              mx: 'auto',
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3,
-              p: { xs: 2, md: 4 },
-              borderRadius: 2,
-              backgroundColor: theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.05)'
-                : 'rgba(255, 255, 255, 0.8)',
-              backdropFilter: 'blur(10px)',
-              border: `1px solid ${theme.palette.mode === 'dark'
-                ? 'rgba(255, 255, 255, 0.1)'
-                : 'rgba(0, 0, 0, 0.1)'}`,
-            }}
-          >
-            <TextField
-              fullWidth
-              label="Name"
-              value={fields.name}
-              onChange={(e) => setFields({ ...fields, name: e.target.value })}
-              required
-              variant="outlined"
-              onFocus={() => setFocused('name')}
-              onBlur={() => setFocused(null)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  transition: 'transform 0.2s ease-in-out',
-                  transform: focused === 'name' ? 'scale(1.02)' : 'scale(1)',
-                  '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.23)'
-                      : 'rgba(0, 0, 0, 0.23)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  }
-                }
-              }}
-            />
+        <div className="w-full max-w-md mx-auto space-y-6 p-4 md:p-6 rounded-lg
+          border border-border/50 bg-card/50">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                type="text"
+                placeholder="Name"
+                value={fields.name}
+                onChange={(e) => setFields({ ...fields, name: e.target.value })}
+                required
+                className="transition-transform duration-200 hover:scale-[1.01] focus:scale-[1.01]"
+              />
+            </div>
 
-            <TextField
-              fullWidth
-              label="Email"
-              type="email"
-              value={fields.email}
-              onChange={(e) => setFields({ ...fields, email: e.target.value })}
-              required
-              variant="outlined"
-              onFocus={() => setFocused('email')}
-              onBlur={() => setFocused(null)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  transition: 'transform 0.2s ease-in-out',
-                  transform: focused === 'email' ? 'scale(1.02)' : 'scale(1)',
-                  '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.23)'
-                      : 'rgba(0, 0, 0, 0.23)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  }
-                }
-              }}
-            />
+            <div className="space-y-2">
+              <Input
+                type="email"
+                placeholder="Email"
+                value={fields.email}
+                onChange={(e) => setFields({ ...fields, email: e.target.value })}
+                required
+                className="transition-transform duration-200 hover:scale-[1.01] focus:scale-[1.01]"
+              />
+            </div>
 
-            <TextField
-              fullWidth
-              label="Message"
-              multiline
-              rows={4}
-              value={fields.message}
-              onChange={(e) => setFields({ ...fields, message: e.target.value })}
-              required
-              variant="outlined"
-              onFocus={() => setFocused('message')}
-              onBlur={() => setFocused(null)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  transition: 'transform 0.2s ease-in-out',
-                  transform: focused === 'message' ? 'scale(1.02)' : 'scale(1)',
-                  '& fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.23)'
-                      : 'rgba(0, 0, 0, 0.23)',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: theme.palette.mode === 'dark'
-                      ? '#93c5fd'
-                      : '#6366f1',
-                  }
-                }
-              }}
-            />
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Your message"
+                value={fields.message}
+                onChange={(e) => setFields({ ...fields, message: e.target.value })}
+                required
+                className="min-h-[120px] transition-transform duration-200 hover:scale-[1.01] focus:scale-[1.01]"
+              />
+            </div>
 
             <Button
               type="submit"
-              variant="contained"
               disabled={isSubmitting}
-              endIcon={<SendIcon />}
-              sx={{
-                py: 1.5,
-                background: theme.palette.mode === 'dark'
-                  ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-                  : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                transition: 'all 0.2s ease-in-out',
-                '&:hover': {
-                  transform: 'translateY(-2px)',
-                  background: theme.palette.mode === 'dark'
-                    ? 'linear-gradient(135deg, #a5b4fc 0%, #93c5fd 100%)'
-                    : 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                }
-              }}
+              className="w-full py-6 text-base font-semibold transition-all duration-200 hover:-translate-y-0.5"
             >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? (
+                'Sending...'
+              ) : (
+                <>
+                  Send Message
+                  <Send className="ml-2 h-5 w-5" />
+                </>
+              )}
             </Button>
-          </Box>
-        </Fade>
-      </Box>
-
-      <Snackbar
-        open={toast.open}
-        autoHideDuration={6000}
-        onClose={() => setToast({ ...toast, open: false })}
-      >
-        <Alert
-          severity={toast.severity}
-          variant="filled"
-          sx={{
-            backgroundColor: toast.severity === 'success'
-              ? '#10B981'
-              : '#EF4444'
-          }}
-        >
-          {toast.message}
-        </Alert>
-      </Snackbar>
-    </Container>
+          </form>
+          {confirmation && (
+            <div className={`mt-4 text-center font-medium ${confirmation.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}>
+              {confirmation}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

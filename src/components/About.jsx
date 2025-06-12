@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Typography,
-  Container,
-  Button,
-  Fade,
-  useTheme,
-  IconButton,
-} from '@mui/material';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import EmailIcon from '@mui/icons-material/Email';
-import DownloadIcon from '@mui/icons-material/Download';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Button } from "@/components/ui/button";
+import { Mail, Download, ChevronDown } from 'lucide-react';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 
 export default function About() {
   const [isVisible, setIsVisible] = useState(false);
-  const theme = useTheme();
 
   useEffect(() => {
     setIsVisible(true);
@@ -29,224 +17,93 @@ export default function About() {
     }
   };
 
+  const socialLinks = [
+    { 
+      icon: <FaGithub className="h-6 w-6" />, 
+      href: 'https://github.com/Srinivas-2410',
+      label: 'GitHub'
+    },
+    { 
+      icon: <FaLinkedin className="h-6 w-6" />, 
+      href: 'https://linkedin.com/in/srinivas-k-s',
+      label: 'LinkedIn'
+    },
+    { 
+      icon: <Mail className="h-6 w-6" />, 
+      href: 'mailto:srinivasks898@gmail.com',
+      label: 'Email'
+    }
+  ];
+
   return (
-    <Container maxWidth="lg">
-      <Box 
-        sx={{ 
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          position: 'relative',
-          py: { xs: 4, sm: 6, md: 8 },
-          px: { xs: 2, sm: 3, md: 4 }
-        }}
-      >
-        {/* Background Elements */}
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            overflow: 'hidden',
-            zIndex: -1,
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: '10%',
-              left: '5%',
-              width: '40%',
-              height: '40%',
-              background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)',
-              borderRadius: '50%',
-            },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: '10%',
-              right: '5%',
-              width: '35%',
-              height: '35%',
-              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
-              borderRadius: '50%',
-            }
-          }}
-        />
+    <div className="container max-w-6xl">
+      <div className="min-h-screen flex flex-col justify-center relative py-8 px-4 sm:px-6 md:px-8">
+        {/* Background gradients */}
+        <div className="absolute inset-0 overflow-hidden -z-10">
+          <div className="absolute top-[10%] left-[5%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-[10%] right-[5%] w-[35%] h-[35%] bg-secondary/10 rounded-full blur-3xl" />
+        </div>
 
-        <Fade in={isVisible} timeout={1000}>
-          <Box sx={{ textAlign: 'center', position: 'relative' }}>
-            <Typography
-              variant="h1"
-              sx={{
-                fontSize: { 
-                  xs: '2rem',
-                  sm: '2.5rem',
-                  md: '3.5rem',
-                  lg: '4rem'
-                },
-                fontWeight: 700,
-                background: theme.palette.mode === 'dark'
-                  ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-                  : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                mb: { xs: 2, sm: 3 },
-                lineHeight: 1.2
-              }}
-            >
-              Srinivas K S
-            </Typography>
+        <div 
+          className={`text-center relative transition-all duration-1000 ease-out ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 text-foreground font-sans">
+            Srinivas K S
+          </h1>
 
-            <Typography
-              variant="h2"
-              sx={{
-                fontSize: { 
-                  xs: '1.25rem',
-                  sm: '1.5rem',
-                  md: '1.75rem'
-                },
-                fontWeight: 300,
-                mb: { xs: 4, sm: 5 },
-                color: theme.palette.mode === 'dark'
-                  ? 'rgba(255, 255, 255, 0.7)'
-                  : 'text.secondary',
-                lineHeight: 1.4
-              }}
-            >
-              Full Stack Developer
-            </Typography>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-foreground font-sans">
+            Full Stack Developer
+          </h2>
 
-            <Box 
-              sx={{ 
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                gap: { xs: 2, sm: 3 },
-                justifyContent: 'center',
-                mb: { xs: 4, sm: 6 }
-              }}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 sm:mb-12">
+            <Button
+              size="lg"
+              onClick={handleContactClick}
+              className="w-full sm:w-auto text-base sm:text-lg py-6 px-8
+                bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary
+                transform transition-all hover:-translate-y-0.5"
             >
-              <Button
-                variant="contained"
-                size="large"
-                onClick={handleContactClick}
-                sx={{
-                  py: { xs: 1.25, sm: 1.5 },
-                  px: { xs: 3, sm: 4 },
-                  fontSize: { xs: '0.9rem', sm: '1.1rem' },
-                  width: { xs: '100%', sm: 'auto' },
-                  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  '&:hover': {
-                    background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
+              Let's Connect
+            </Button>
+
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full sm:w-auto text-base sm:text-lg py-6 px-8
+                transform transition-all hover:-translate-y-0.5"
+              asChild
+            >
+              <a href="/resume.pdf" download className="flex items-center">
+                <Download className="mr-2 h-5 w-5" />
+                <span>Download CV</span>
+              </a>
+            </Button>
+          </div>
+
+          <div className="flex justify-center gap-6 mb-8 sm:mb-12">
+            {socialLinks.map((social, index) => (
+              <a
+                key={index}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.label}
+                className="p-3 rounded-full hover:bg-primary/10 transform transition-all 
+                  hover:scale-110 hover:text-primary text-foreground"
               >
-                Let's Connect
-              </Button>
-                      
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<DownloadIcon />}
-                href="/resume.pdf"
-                download
-                sx={{
-                  py: { xs: 1.25, sm: 1.5 },
-                  px: { xs: 3, sm: 4 },
-                  fontSize: { xs: '0.9rem', sm: '1.1rem' },
-                  width: { xs: '100%', sm: 'auto' },
-                  borderColor: theme.palette.mode === 'dark'
-                    ? 'rgba(255, 255, 255, 0.23)'
-                    : 'rgba(0, 0, 0, 0.23)',
-                  color: theme.palette.mode === 'dark'
-                    ? 'white'
-                    : 'inherit',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    borderColor: theme.palette.mode === 'dark'
-                      ? 'white'
-                      : 'primary.main',
-                    backgroundColor: theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(0, 0, 0, 0.05)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Download CV
-              </Button>
-            </Box>
+                {social.icon}
+              </a>
+            ))}
+          </div>
 
-            <Box 
-              sx={{ 
-                display: 'flex',
-                justifyContent: 'center',
-                gap: { xs: 2, sm: 3 },
-                mb: { xs: 4, sm: 6 }
-              }}
-            >
-              {[
-                { 
-                  icon: <GitHubIcon />, 
-                  href: 'https://github.com/Srinivas-2410',
-                  label: 'GitHub'
-                },
-                { 
-                  icon: <LinkedInIcon />, 
-                  href: 'https://linkedin.com/in/srinivas-k-s',
-                  label: 'LinkedIn'
-                },
-                { 
-                  icon: <EmailIcon />, 
-                  href: 'mailto:srinivasks898@gmail.com',
-                  label: 'Email'
-                }
-              ].map((social, index) => (
-                <IconButton
-                  key={index}
-                  href={social.href}
-                  aria-label={social.label}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    width: { xs: 40, sm: 48 },
-                    height: { xs: 40, sm: 48 },
-                    '&:hover': { 
-                      color: 'primary.main',
-                      transform: 'scale(1.1)'
-                    },
-                    transition: 'all 0.3s ease'
-                  }}
-                >
-                  {React.cloneElement(social.icon, {
-                    sx: { fontSize: { xs: '1.5rem', sm: '2rem' } }
-                  })}
-                </IconButton>
-              ))}
-            </Box>
-
-            <Box
-              sx={{ 
-                position: 'absolute',
-                bottom: { xs: -48, md: -64 },
-                left: '50%',
-                transform: 'translateX(-50%)',
-                display: { xs: 'none', md: 'block' },
-                color: theme.palette.mode === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.5)' 
-                  : 'rgba(0, 0, 0, 0.5)',
-                animation: 'bounce 2s infinite'
-              }}
-            >
-              <KeyboardArrowDownIcon sx={{ fontSize: '2rem' }} />
-            </Box>
-          </Box>
-        </Fade>
-      </Box>
-    </Container>
+          <div className="hidden md:block absolute -bottom-16 left-1/2 -translate-x-1/2 
+            text-muted-foreground animate-bounce">
+            <ChevronDown className="h-8 w-8" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

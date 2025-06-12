@@ -1,118 +1,69 @@
-import React from "react";
-import {
-  Typography,
-  Button,
-  Box,
-  Container,
-  Fade,
-  useTheme,
-} from "@mui/material";
-import DownloadIcon from "@mui/icons-material/Download";
-import PreviewIcon from '@mui/icons-material/Preview';
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { FileText, Download } from "lucide-react";
 
 export default function Resume() {
-  const theme = useTheme();
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   return (
-    <section className="min-h-screen flex items-center justify-center">
-      <Fade in timeout={1000}>
-        <Container maxWidth="md">
-          <Box 
-            sx={{ 
-              textAlign: 'center',
-              py: { xs: 4, md: 8 }
-            }}
+    <section className="min-h-screen flex items-center justify-center py-16 relative">
+      <div
+        className={`
+          container max-w-4xl text-center
+          transition-all duration-1000 transform
+          ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+        `}
+      >
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-foreground font-sans">
+          Resume
+        </h2>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto px-4 mb-8">
+          <Button
+            variant="outline"
+            size="lg"
+            className="group w-full sm:w-auto text-nowrap transition-all duration-300 hover:-translate-y-0.5"
+            asChild
           >
-            <Typography 
-              variant="h2" 
-              className="font-bold mb-8"
-              sx={{
-                fontSize: { xs: '2.5rem', md: '3.5rem' },
-                background: theme.palette.mode === 'dark'
-                  ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-                  : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                mb: 6
-              }}
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center text-xl font-semibold"
             >
-              Resume
-            </Typography>
+              <FileText size={24} className="mr-2 transition-transform duration-300 group-hover:scale-110" />
+              View Resume
+            </a>
+          </Button>
 
-            <Box 
-              sx={{ 
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                gap: 3,
-                justifyContent: 'center',
-                maxWidth: 'sm',
-                mx: 'auto',
-                px: 2
-              }}
+          <Button
+            size="lg"
+            className="group w-full sm:w-auto text-nowrap transition-all duration-300 hover:-translate-y-0.5"
+            asChild
+          >
+            <a
+              href="/resume.pdf"
+              download
+              className="flex items-center justify-center text-xl font-semibold"
             >
-              <Button
-                variant="outlined"
-                size="large"
-                startIcon={<PreviewIcon />}
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{
-                  py: 1.5,
-                  px: 4,
-                  borderColor: theme.palette.mode === 'dark' 
-                    ? 'rgba(255, 255, 255, 0.23)' 
-                    : 'rgba(0, 0, 0, 0.23)',
-                  color: theme.palette.mode === 'dark' 
-                    ? 'white' 
-                    : 'inherit',
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    borderColor: theme.palette.mode === 'dark' 
-                      ? '#93c5fd' 
-                      : '#6366f1',
-                    backgroundColor: theme.palette.mode === 'dark'
-                      ? 'rgba(147, 197, 253, 0.08)'
-                      : 'rgba(99, 102, 241, 0.08)',
-                  }
-                }}
-              >
-                View Resume
-              </Button>
+              <Download size={24} className="mr-2 transition-transform duration-300 group-hover:scale-110" />
+              Download Resume
+            </a>
+          </Button>
+        </div>
 
-              <Button
-                variant="contained"
-                size="large"
-                startIcon={<DownloadIcon />}
-                href="/resume.pdf"
-                download
-                sx={{
-                  py: 1.5,
-                  px: 4,
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  transition: 'all 0.2s ease-in-out',
-                  background: theme.palette.mode === 'dark'
-                    ? 'linear-gradient(135deg, #93c5fd 0%, #a5b4fc 100%)'
-                    : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    background: theme.palette.mode === 'dark'
-                      ? 'linear-gradient(135deg, #a5b4fc 0%, #93c5fd 100%)'
-                      : 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
-                  }
-                }}
-              >
-                Download Resume
-              </Button>
-            </Box>
-          </Box>
-        </Container>
-      </Fade>
+        {/* Add your resume content here if needed */}
+
+        {/* Background gradients */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-1/3 h-1/3 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 bg-secondary/10 rounded-full blur-3xl" />
+        </div>
+      </div>
     </section>
   );
 }
